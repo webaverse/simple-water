@@ -40,10 +40,13 @@ export default (ctx) => {
         localPlayer.actionManager.hasActionType('skydive') && localPlayer.actionManager.removeActionType('skydive');
         localPlayer.actionManager.hasActionType('glider') && localPlayer.actionManager.removeActionType('glider');
       }
-    } else {
+    } else if (localPlayer.actionManager.hasActionType('onWaterSurface')) {
       if (localPlayer.actionManager.hasActionType('swim')) {
         localPlayer.actionManager.removeActionType('swim');
       }
+    } else {
+      const newOnWaterSurfaceAction = {type: 'onWaterSurface'};
+      localPlayer.actionManager.addAction(newOnWaterSurfaceAction);
     }
   });
   
