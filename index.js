@@ -32,7 +32,7 @@ export default (ctx) => {
     // localVector2D.x = localPlayer.position.x;
     // localVector2D.y = localPlayer.position.z;
     // if (localVector2D.length() > 3) {
-    if (localPlayer.position.y <= -1) {
+    if (localPlayer.position.y <= -1) { // todo: use constant or detect current water height.
       if (!localPlayer.actionManager.hasActionType('swim')) {
         const newSwimAction = {type: 'swim'};
         localPlayer.actionManager.addAction(newSwimAction);
@@ -40,13 +40,16 @@ export default (ctx) => {
         localPlayer.actionManager.hasActionType('skydive') && localPlayer.actionManager.removeActionType('skydive');
         localPlayer.actionManager.hasActionType('glider') && localPlayer.actionManager.removeActionType('glider');
       }
-    } else if (localPlayer.actionManager.hasActionType('onWaterSurface')) {
-      if (localPlayer.actionManager.hasActionType('swim')) {
-        localPlayer.actionManager.removeActionType('swim');
+    } else {
+      localPlayer.actionManager.hasActionType('swim') && localPlayer.actionManager.removeActionType('swim');
+    }
+    if (localPlayer.position.y >= -1.1) { // todo: how to handle moveDistancePerFrame > 0.1 ?
+      if (!localPlayer.actionManager.hasActionType('onWaterSurface')) {
+        const newOnWaterSurfaceAction = {type: 'onWaterSurface'};
+        localPlayer.actionManager.addAction(newOnWaterSurfaceAction);
       }
     } else {
-      const newOnWaterSurfaceAction = {type: 'onWaterSurface'};
-      localPlayer.actionManager.addAction(newOnWaterSurfaceAction);
+      localPlayer.actionManager.hasActionType('onWaterSurface') && localPlayer.actionManager.removeActionType('onWaterSurface');
     }
   });
   
